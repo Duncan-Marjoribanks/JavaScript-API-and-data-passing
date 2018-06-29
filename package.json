@@ -1,0 +1,17 @@
+{
+  "name": "netrunnerapiapp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "webpack": "^4.14.0",
+    "webpack-cli": "^3.0.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "webpack -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
