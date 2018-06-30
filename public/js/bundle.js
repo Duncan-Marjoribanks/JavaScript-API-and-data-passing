@@ -97,6 +97,17 @@ eval("const Cards = __webpack_require__(/*! ./models/cards.js */ \"./src/models/
 
 /***/ }),
 
+/***/ "./src/helpers/data_sorter.js":
+/*!************************************!*\
+  !*** ./src/helpers/data_sorter.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("const DataSorter = function () {\n}\n\n\n\n\n\nDataSorter.prototype.sortByFaction = function (dataToSort, faction) {\n  console.log(dataToSort);\n  const result = dataToSort.filter((item) => {\n    return item.faction_code == faction;\n  });\n  console.log(result);\n  return result;\n};\n\n\nmodule.exports = DataSorter;\n\n\n//# sourceURL=webpack:///./src/helpers/data_sorter.js?");
+
+/***/ }),
+
 /***/ "./src/helpers/pub_sub.js":
 /*!********************************!*\
   !*** ./src/helpers/pub_sub.js ***!
@@ -148,7 +159,7 @@ eval("const CardView = function (object) {\nthis.card = object;\n}\n\nCardView.p
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst CardView = __webpack_require__(/*! ./card_view.js */ \"./src/views/card_view.js\");\n\nconst SelectView = function(element) {\n  this.element = element;\n}\n\nSelectView.prototype.initialize = function () {\n  console.log(this.element);\n  PubSub.subscribe('Cards:Data-ready', (event) => {\n    console.log(event);\n    const cardData = event.detail;\n    console.log(cardData.data);\n    this.populate(cardData.data);\n\n  })\n\n};\n\nSelectView.prototype.populate = function (data) {\n  for (card of data) {\n    const cardView = new CardView(card);\n    const cardElement = cardView.initialize()\n    this.element.appendChild(cardElement);\n  }\n};\n\n\nmodule.exports = SelectView;\n\n\n//# sourceURL=webpack:///./src/views/select.js?");
+eval("const DataSorter = __webpack_require__(/*! ../helpers/data_sorter */ \"./src/helpers/data_sorter.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst CardView = __webpack_require__(/*! ./card_view.js */ \"./src/views/card_view.js\");\n\nconst SelectView = function(element) {\n  this.element = element;\n}\n\nconst dataSorter = new DataSorter();\n\nSelectView.prototype.initialize = function () {\n  console.log(this.element);\n  PubSub.subscribe('Cards:Data-ready', (event) => {\n    console.log(event);\n    const cardData = event.detail.data;\n    console.log(cardData);\n\n    this.populate(dataSorter.sortByFaction(cardData, \"criminal\"));\n  })\n};\n\n\nSelectView.prototype.populate = function (data) {\n  for (card of data) {\n    const cardView = new CardView(card);\n    const cardElement = cardView.initialize()\n    this.element.appendChild(cardElement);\n  }\n};\n\n\n\n\nmodule.exports = SelectView;\n\n\n//# sourceURL=webpack:///./src/views/select.js?");
 
 /***/ })
 
