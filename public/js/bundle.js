@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const Cards = __webpack_require__(/*! ./models/cards.js */ \"./src/models/cards.js\");\nconst SelectView = __webpack_require__(/*! ./views/select.js */ \"./src/views/select.js\");\n\ndocument.addEventListener('DOMContentLoaded', () => {\n  console.log('js loaded');\n\n\nconst cardsContainer = document.querySelector('#container');\nconsole.log(cardsContainer);\nconst selectView = new SelectView(cardsContainer);\nselectView.initialize();\n\n\n\nconst cardsData = new Cards();\ncardsData.getData();\n\n\n});\n\n\n//# sourceURL=webpack:///./src/app.js?");
+eval("const Cards = __webpack_require__(/*! ./models/cards.js */ \"./src/models/cards.js\");\nconst SelectView = __webpack_require__(/*! ./views/select.js */ \"./src/views/select.js\");\nconst ListView = __webpack_require__(/*! ./views/list_view.js */ \"./src/views/list_view.js\");\nconst SelectDisplay = __webpack_require__(/*! ./views/select_display.js */ \"./src/views/select_display.js\");\n\n\ndocument.addEventListener('DOMContentLoaded', () => {\n  console.log('js loaded');\n\n\nconst menuContainer = document.querySelector('#container');\nconst cardsContainer = document.createElement('select');\nconst cardDisplay = document.createElement('div');\nmenuContainer.appendChild(cardsContainer);\nmenuContainer.appendChild(cardDisplay);\nconsole.log(cardsContainer);\nconst selectView = new SelectView(cardsContainer);\nselectView.initialize();\n\nconst selectDisplay = new SelectDisplay(cardDisplay);\nselectDisplay.initialize();\n\n// this will be used in the listView if I get menus working\n// const listView = new ListView(menuContainer);\n// listView.initialize();\n\n\nconst cardsData = new Cards();\ncardsData.getData();\n\n});\n\n\n//# sourceURL=webpack:///./src/app.js?");
 
 /***/ }),
 
@@ -104,7 +104,7 @@ eval("const Cards = __webpack_require__(/*! ./models/cards.js */ \"./src/models/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("const DataSorter = function () {\n}\n\n\n\n\n\nDataSorter.prototype.sortByFaction = function (dataToSort, faction) {\n  console.log(dataToSort);\n  const result = dataToSort.filter((item) => {\n    return item.faction_code == faction;\n  });\n  console.log(result);\n  return result;\n};\n\n\nmodule.exports = DataSorter;\n\n\n//# sourceURL=webpack:///./src/helpers/data_sorter.js?");
+eval("const DataSorter = function () {\n}\n\n\n\nDataSorter.prototype.sortByFaction = function (dataToSort, faction) {\n  console.log(dataToSort);\n  const result = dataToSort.filter((item) => {\n    return item.faction_code == faction;\n  });\n  console.log(result);\n  return result;\n};\n\nDataSorter.prototype.sortByType = function (dataToSort, type) {\n  console.log(dataToSort);\n  const result = dataToSort.filter((item) => {\n    return item.type_code == type;\n  });\n  console.log(result);\n  return result;\n};\n\nDataSorter.prototype.sortByCost = function (dataToSort, amount) {\n  console.log(dataToSort);\n  const result = dataToSort.filter((item) => {\n    return item.cost == amount;\n  });\n  console.log(result);\n  return result;\n};\n\n\nmodule.exports = DataSorter;\n\n\n//# sourceURL=webpack:///./src/helpers/data_sorter.js?");
 
 /***/ }),
 
@@ -148,7 +148,18 @@ eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/he
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("const CardView = function (object) {\nthis.card = object;\n}\n\nCardView.prototype.initialize = function () {\n\n  const cardElement = document.createElement('ul');\n\n  const cardName = document.createElement('li');\n  cardName.textContent = this.card.title;\n  cardElement.appendChild(cardName);\n\n  const cardType = document.createElement('li');\n  cardType.textContent = this.card.type_code;\n  cardElement.appendChild(cardType);\n\n  const cardFaction = document.createElement('li');\n  cardFaction.textContent = this.card.faction_code;\n  cardElement.appendChild(cardType);\n\n  const cardPack = document.createElement('li');\n  cardPack.textContent = this.card.pack_code;\n  cardElement.appendChild(cardPack);\n\n  const cardImage = document.createElement('img');\n  cardImage.src = `https://netrunnerdb.com/card_image/${this.card.code}.png`;\n  cardElement.appendChild(cardImage);\n\n\n\n\n  return cardElement;\n};\n\n\n\nmodule.exports = CardView;\n\n\n//# sourceURL=webpack:///./src/views/card_view.js?");
+eval("const CardView = function (object) {\nthis.card = object;\n}\n\nCardView.prototype.initialize = function () {\n\n  const cardElement = document.createElement('ul');\n\n  const cardName = document.createElement('li');\n  cardName.textContent = this.card.title;\n  cardElement.appendChild(cardName);\n\n  const cardType = document.createElement('li');\n  cardType.textContent = this.card.type_code;\n  cardElement.appendChild(cardType);\n\n  const cardFaction = document.createElement('li');\n  cardFaction.textContent = this.card.faction_code;\n  cardElement.appendChild(cardFaction);\n\n  const cardPack = document.createElement('li');\n  cardPack.textContent = this.card.text;\n  cardElement.appendChild(cardPack);\n\n  const cardImage = document.createElement('img');\n  cardImage.src = `https://netrunnerdb.com/card_image/${this.card.code}.png`;\n  cardElement.appendChild(cardImage);\n\n  console.log(cardElement);\n\n  return cardElement;\n};\n\n\n\nmodule.exports = CardView;\n\n\n//# sourceURL=webpack:///./src/views/card_view.js?");
+
+/***/ }),
+
+/***/ "./src/views/list_view.js":
+/*!********************************!*\
+  !*** ./src/views/list_view.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const DataSorter = __webpack_require__(/*! ../helpers/data_sorter */ \"./src/helpers/data_sorter.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst CardView = __webpack_require__(/*! ./card_view.js */ \"./src/views/card_view.js\");\n\nconst ListView = function(element) {\n  this.element = element;\n}\n\n// if this file were to be used, it would be implemented in a situation where I had the time to\n// get menu's populating further menus working\n\nListView.prototype.initialize = function () {\n  // console.log(this.element);\n  PubSub.subscribe('Cards:Data-ready', (event) => {\n    console.log(event);\n    const cardData = event.detail.data;\n    console.log(cardData);\n\n    const dataSorter = new DataSorter();\n    const criminalCards = dataSorter.sortByFaction(cardData, \"criminal\");\n    const criminalPrograms = dataSorter.sortByType(criminalCards, \"program\");\n    const criminalProgramsCost2 = dataSorter.sortByCost(criminalPrograms, \"3\");\n    this.populate(criminalProgramsCost2);\n\n  })\n};\n\nListView.prototype.populate = function (data) {\n  for (card of data) {\n    const cardView = new CardView(card);\n    const cardElement = cardView.initialize()\n    this.element.appendChild(cardElement);\n  }\n};\n\nmodule.exports = ListView;\n\n\n//# sourceURL=webpack:///./src/views/list_view.js?");
 
 /***/ }),
 
@@ -159,7 +170,18 @@ eval("const CardView = function (object) {\nthis.card = object;\n}\n\nCardView.p
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const DataSorter = __webpack_require__(/*! ../helpers/data_sorter */ \"./src/helpers/data_sorter.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst CardView = __webpack_require__(/*! ./card_view.js */ \"./src/views/card_view.js\");\n\nconst SelectView = function(element) {\n  this.element = element;\n}\n\nconst dataSorter = new DataSorter();\n\nSelectView.prototype.initialize = function () {\n  console.log(this.element);\n  PubSub.subscribe('Cards:Data-ready', (event) => {\n    console.log(event);\n    const cardData = event.detail.data;\n    console.log(cardData);\n\n    this.populate(dataSorter.sortByFaction(cardData, \"criminal\"));\n  })\n};\n\n\nSelectView.prototype.populate = function (data) {\n  for (card of data) {\n    const cardView = new CardView(card);\n    const cardElement = cardView.initialize()\n    this.element.appendChild(cardElement);\n  }\n};\n\n\n\n\nmodule.exports = SelectView;\n\n\n//# sourceURL=webpack:///./src/views/select.js?");
+eval("const DataSorter = __webpack_require__(/*! ../helpers/data_sorter */ \"./src/helpers/data_sorter.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst CardView = __webpack_require__(/*! ./card_view.js */ \"./src/views/card_view.js\");\n\nconst SelectView = function(element) {\n  this.element = element;\n}\n\nSelectView.prototype.initialize = function () {\n  // console.log(this.element);\n  PubSub.subscribe('Cards:Data-ready', (event) => {\n    // console.log(event);\n    const cardData = event.detail.data;\n    // console.log(cardData);\n    this.createCardsMenu(cardData);\n    this.element.addEventListener('change', (evt) => {\n      const selectedCardIndex = evt.target.value;\n      const selectedCard = cardData[selectedCardIndex];\n      // console.log(selectedCard);\n      const cardDisplay = new CardView(selectedCard);\n      const cardElement = cardDisplay.initialize()\n      // console.log(cardElement);\n      PubSub.publish('Select:Selected-card', cardElement);\n    });\n  })\n};\n\nSelectView.prototype.createCardsMenu = function (data) {\n  const menu = document.createElement('select')\n  data.forEach((item, index) => {\n    const option = document.createElement('option');\n    option.textContent = item.title;\n    option.value = index;\n    this.element.appendChild(option);\n  });\n};\n\n\nmodule.exports = SelectView;\n\n\n//# sourceURL=webpack:///./src/views/select.js?");
+
+/***/ }),
+
+/***/ "./src/views/select_display.js":
+/*!*************************************!*\
+  !*** ./src/views/select_display.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\n\nconst SelectDisplay = function (element) {\n  this.element = element;\n}\n\nSelectDisplay.prototype.initialize = function () {\n  console.log(this.element);\n  PubSub.subscribe('Select:Selected-card', (event) => {\n    this.element.appendChild(event.detail);\n  })\n\n};\n\n\n\nmodule.exports = SelectDisplay;\n\n\n//# sourceURL=webpack:///./src/views/select_display.js?");
 
 /***/ })
 
