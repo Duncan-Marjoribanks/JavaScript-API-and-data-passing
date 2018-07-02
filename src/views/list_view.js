@@ -16,6 +16,8 @@ ListView.prototype.initialize = function () {
     const cardData = event.detail.data;
     console.log(cardData);
 
+// if I had time to implement this, I would have a helper that took the fields as another argument
+// so that my code was not repeating quite so much
     const dataSorter = new DataSorter();
     const criminalCards = dataSorter.sortByFaction(cardData, "criminal");
     const criminalPrograms = dataSorter.sortByType(criminalCards, "program");

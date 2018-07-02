@@ -7,11 +7,10 @@ const SelectDisplay = function (element) {
 SelectDisplay.prototype.initialize = function () {
   console.log(this.element);
   PubSub.subscribe('Select:Selected-card', (event) => {
+    this.element.innerHTML = "";
     this.element.appendChild(event.detail);
   })
 
 };
-
-
 
 module.exports = SelectDisplay;
